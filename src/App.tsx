@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from 'uuid'; // Importa uuid
+import { FaTrash } from 'react-icons/fa';
 
 interface Item {
  id: string;
@@ -55,7 +56,18 @@ function App() {
           <h3>lista de elementos</h3>
           <ul>
             {items.map((item) => {
-              return <li key={item.id}>{item.text}</li>;
+              return (
+                <li key={item.id}>
+                 {item.text}
+                 <FaTrash className="trash"
+                    onClick={() => {
+                      setItems((prevItems) => {
+                        return prevItems.filter(currentItem => currentItem.id !== item.id);
+                      });
+                    }}
+                 />
+                </li>
+              );
             })}
           </ul>
         </section>

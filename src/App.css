@@ -30,3 +30,8 @@ input {
 ul{
   list-style: none;
 }
+.trash{
+ color: red; 
+ cursor: pointer;
+ margin-left: 10px;
+}
