@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { v4 as uuidv4 } from 'uuid'; // Importa uuid
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface Item {
+ id: string;
+ text: string;
 }
 
-export default App
+const ITEMS: Item[] = [
+ {
+    id: uuidv4(), //uuidv4() para generar un ID único
+    text: "Peliculas",
+ },
+ {
+    id: uuidv4(), 
+    text: "Libros",
+ },
+];
+
+function App() {
+ const [items, setItems] = useState(ITEMS);
+ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { elements } = event.currentTarget;
+
+    const input = elements.namedItem('item');
+    const isInput = input instanceof HTMLInputElement;
+    if (!isInput || input == null) return;
+
+    const newItem: Item = {
+      id: uuidv4(), 
+      text: input.value,
+    };
+    setItems((prevItems) => {
+      return [...prevItems, newItem]; 
+    });
+    input.value = "";
+ };
+
+ return (
+    <>
+      <main>
+        <aside>
+          <h2>Agregar elementos a una lista</h2>
+          <form onSubmit={handleSubmit}> 
+            <label>
+              Elemento a ingresar a la lista:
+              <input name="item" required type="text" placeholder="elementos" />
+            </label>
+            <button type="submit">Agregar</button> 
+          </form>
+        </aside>
+        <section>
+          <h3>lista de elementos</h3>
+          <ul>
+            {items.map((item) => {
+              return <li key={item.id}>{item.text}</li>;
+            })}
+          </ul>
+        </section>
+      </main>
+    </>
+ );
+}
+
+export default App;
+
